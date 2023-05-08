@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bae-v3-6Co">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Splash View Controller-->
+        <scene sceneID="t1i-hg-6gN">
+            <objects>
+                <viewController id="bae-v3-6Co" customClass="SplashViewController" customModule="Clima" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Qw1-Mt-C13">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" translatesAutoresizingMaskIntoConstraints="NO" id="3cb-yg-Yqd">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clima" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LwS-V3-ClC">
+                                <rect key="frame" x="161.5" y="193" width="91" height="46"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="35"/>
+                                <color key="textColor" red="0.20000001789999999" green="0.46274507050000002" blue="0.80392158030000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="weathericon" translatesAutoresizingMaskIntoConstraints="NO" id="lcU-hn-Y1o">
+                                <rect key="frame" x="159" y="128" width="96" height="57"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="57" id="Ccu-zn-JW2"/>
+                                    <constraint firstAttribute="width" constant="96" id="dDP-uG-95a"/>
+                                </constraints>
+                            </imageView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Bzc-ED-OUu">
+                                <rect key="frame" x="35" y="739" width="344" height="4"/>
+                                <color key="progressTintColor" red="0.20000001789999999" green="0.46274507050000002" blue="0.80392158030000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </progressView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Fud-fH-AEH"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Bzc-ED-OUu" firstAttribute="top" secondItem="LwS-V3-ClC" secondAttribute="bottom" constant="500" id="9Qp-Qc-vYc"/>
+                            <constraint firstItem="3cb-yg-Yqd" firstAttribute="leading" secondItem="Fud-fH-AEH" secondAttribute="leading" id="IBo-m3-Vcn"/>
+                            <constraint firstItem="Bzc-ED-OUu" firstAttribute="centerX" secondItem="Qw1-Mt-C13" secondAttribute="centerX" id="LlR-ZN-5Jy"/>
+                            <constraint firstItem="lcU-hn-Y1o" firstAttribute="leading" secondItem="Fud-fH-AEH" secondAttribute="leading" constant="159" id="QfK-Wk-IlX"/>
+                            <constraint firstItem="3cb-yg-Yqd" firstAttribute="top" secondItem="Qw1-Mt-C13" secondAttribute="top" id="aEA-fl-LSp"/>
+                            <constraint firstItem="LwS-V3-ClC" firstAttribute="centerX" secondItem="Qw1-Mt-C13" secondAttribute="centerX" id="fol-ad-sKw"/>
+                            <constraint firstItem="lcU-hn-Y1o" firstAttribute="top" secondItem="Fud-fH-AEH" secondAttribute="top" constant="80" id="fuh-SE-FH9"/>
+                            <constraint firstAttribute="bottom" secondItem="3cb-yg-Yqd" secondAttribute="bottom" id="icj-BM-bZc"/>
+                            <constraint firstItem="lcU-hn-Y1o" firstAttribute="centerX" secondItem="Qw1-Mt-C13" secondAttribute="centerX" id="jPd-sG-u51"/>
+                            <constraint firstItem="Bzc-ED-OUu" firstAttribute="leading" secondItem="Fud-fH-AEH" secondAttribute="leading" constant="35" id="pNQ-cV-ff0"/>
+                            <constraint firstItem="LwS-V3-ClC" firstAttribute="top" secondItem="lcU-hn-Y1o" secondAttribute="bottom" constant="8" id="qEY-2Z-wMa"/>
+                            <constraint firstItem="3cb-yg-Yqd" firstAttribute="trailing" secondItem="Fud-fH-AEH" secondAttribute="trailing" id="xHZ-DU-9ph"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="progressBar" destination="Bzc-ED-OUu" id="bUe-C7-XiT"/>
+                        <segue destination="QT8-re-v2x" kind="show" identifier="showMainScreen" id="mVA-QA-rUO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wty-P6-AMo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="45" y="11"/>
+        </scene>
+        <!--Main-->
+        <scene sceneID="ulQ-vo-2Hk">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" id="QT8-re-v2x" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="lnS-Kp-5b1"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iLW-Do-Ir7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="653" y="11"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="launch" width="3000" height="2000"/>
+        <image name="weathericon" width="96" height="96"/>
+    </resources>
+</document>
