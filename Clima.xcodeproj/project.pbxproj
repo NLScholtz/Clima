@@ -20,6 +20,10 @@
 		3E27C48D2A08DBA700DE00A2 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E27C48C2A08DBA700DE00A2 /* SplashScreen.storyboard */; };
 		3E2D8F5A2A08ED6600625301 /* FavouriteWeather.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E2D8F592A08ED6600625301 /* FavouriteWeather.storyboard */; };
 		3E2D8F5C2A08ED7D00625301 /* FavouriteWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2D8F5B2A08ED7D00625301 /* FavouriteWeatherViewController.swift */; };
+		3EE8E0852A08FAE0004A092E /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE8E0842A08FAE0004A092E /* URLSession.swift */; };
+		3EE8E0872A08FAEB004A092E /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE8E0862A08FAEB004A092E /* WeatherModel.swift */; };
+		3EE8E08A2A08FB2C004A092E /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE8E0892A08FB2C004A092E /* Responses.swift */; };
+		3EE8E08D2A08FB43004A092E /* ClimaContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3EE8E08B2A08FB43004A092E /* ClimaContainer.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +61,10 @@
 		3E27C48C2A08DBA700DE00A2 /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		3E2D8F592A08ED6600625301 /* FavouriteWeather.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FavouriteWeather.storyboard; sourceTree = "<group>"; };
 		3E2D8F5B2A08ED7D00625301 /* FavouriteWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteWeatherViewController.swift; sourceTree = "<group>"; };
+		3EE8E0842A08FAE0004A092E /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
+		3EE8E0862A08FAEB004A092E /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		3EE8E0892A08FB2C004A092E /* Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responses.swift; sourceTree = "<group>"; };
+		3EE8E08C2A08FB43004A092E /* ClimaContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClimaContainer.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,8 +207,36 @@
 		3EDF80792A08EDEA00BFC150 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				3EE8E0882A08FB0B004A092E /* Model */,
+				3EE8E0822A08FAB4004A092E /* Service */,
+				3EE8E0832A08FABA004A092E /* Database */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		3EE8E0822A08FAB4004A092E /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				3EE8E0842A08FAE0004A092E /* URLSession.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		3EE8E0832A08FABA004A092E /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				3EE8E08B2A08FB43004A092E /* ClimaContainer.xcdatamodeld */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		3EE8E0882A08FB0B004A092E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3EE8E0862A08FAEB004A092E /* WeatherModel.swift */,
+				3EE8E0892A08FB2C004A092E /* Responses.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,8 +374,12 @@
 			files = (
 				3E27C45C2A08D37400DE00A2 /* MainViewController.swift in Sources */,
 				3E2D8F5C2A08ED7D00625301 /* FavouriteWeatherViewController.swift in Sources */,
+				3EE8E0852A08FAE0004A092E /* URLSession.swift in Sources */,
+				3EE8E0872A08FAEB004A092E /* WeatherModel.swift in Sources */,
+				3EE8E08A2A08FB2C004A092E /* Responses.swift in Sources */,
 				3E27C4582A08D37400DE00A2 /* AppDelegate.swift in Sources */,
 				3E27C45A2A08D37400DE00A2 /* SceneDelegate.swift in Sources */,
+				3EE8E08D2A08FB43004A092E /* ClimaContainer.xcdatamodeld in Sources */,
 				3E27C48B2A08DB7400DE00A2 /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -682,6 +722,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3EE8E08B2A08FB43004A092E /* ClimaContainer.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3EE8E08C2A08FB43004A092E /* ClimaContainer.xcdatamodel */,
+			);
+			currentVersion = 3EE8E08C2A08FB43004A092E /* ClimaContainer.xcdatamodel */;
+			path = ClimaContainer.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3E27C44C2A08D37400DE00A2 /* Project object */;
 }
