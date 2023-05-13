@@ -13,9 +13,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     private lazy var viewModel = MainViewModel(delegate: self)
     
     @IBOutlet weak var toggleAppearance: UIButton!
-    
     @IBOutlet weak var forecastTableView: UITableView!
-    
     @IBOutlet weak var mainCurrentTemperature: UILabel!
     @IBOutlet weak var currentTemperate: UILabel!
     @IBOutlet weak var minTemperature: UILabel!
@@ -24,6 +22,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var weatherCondition: UILabel!
     @IBOutlet weak var weatherBackground: UIImageView!
     @IBOutlet weak var parentView: UIView!
+    @IBOutlet weak var lastUpdatedDate: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,11 +37,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func saveWeather(_ sender: UIButton) {
+        viewModel.saveWeatherOffline(cityName: cityName.text ?? "")
     }
     
     @IBAction func searchWeatherByCity(_ sender: UIButton) {
         showInputDialog(title: "Search City", subtitle: "Provide a city name do display the weather", actionTitle: "OK", cancelTitle: "Cancel", inputPlaceholder: "Johannesburg", inputKeyboardType: .default, actionHandler: { (city:String?) in
-            print("The searched city is \(city ?? "")")
+            //print("The searched city is \(city ?? "")")
             self.viewModel.cityReceived(city: city ?? "")
         })
     }
@@ -50,11 +50,16 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func displayFavourites(_ sender: UIButton) {
         performSegue(withIdentifier: "showFavouriteWeather", sender: self)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let favouriteViewController = segue.destination as! FavouriteWeatherViewController
+        favouriteViewController.delegate = self
+    }
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return viewModel.numberOfForecast
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,7 +87,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension MainViewController: MainViewModelDelegate {
+extension MainViewController: MainViewModelDelegate, FavouriteWeatherViewModelDelegate {
+    func favouriteWeather(object: [String : String], index: Int) {
+        cityName.text = object["name"]
+    }
+    
     func weatherUpdated() {
         cityName.text = viewModel.cityName
         mainCurrentTemperature.text = viewModel.currentTemperature(at: 0)
@@ -97,7 +106,15 @@ extension MainViewController: MainViewModelDelegate {
             self.forecastTableView.reloadData()
         }
     }
-    
-    func receivedCity(city: String) { }
 }
 
+extension MainViewController: FavouriteWeatherViewControllerDelegate {
+    func favouriteCitySelected(cityName: String) {
+        if CheckNetworkConnection.isConnectedToNetwork() {
+            self.viewModel.cityReceived(city: cityName )
+        } else {
+            self.cityName.text = cityName
+            viewModel.offlineCitySelected(cityName: cityName)
+        }
+    }
+}

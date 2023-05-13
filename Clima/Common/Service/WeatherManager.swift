@@ -57,7 +57,7 @@ class WeatherManager {
         return urlComponents
     }
     
-    private func getWeather<T: Decodable>(with components: URLComponents, completion: ((Result<T>) -> Void)?) {
+     func getWeather<T: Decodable>(with components: URLComponents, completion: ((Result<T>) -> Void)?) {
         guard let url = components.url else { return }
         var request = URLRequest(url: url)
         request.httpMethod = HTTP_Methods.get

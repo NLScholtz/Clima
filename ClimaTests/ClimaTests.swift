@@ -2,11 +2,10 @@
 //  ClimaTests.swift
 //  ClimaTests
 //
-//  Created by Nicole Scholtz on 2023/05/08.
+//  Created by Nicole Scholtz on 2023/05/13.
 //
 
 import XCTest
-@testable import Clima
 
 final class ClimaTests: XCTestCase {
 
@@ -28,7 +27,7 @@ final class ClimaTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        self.measure {
+        measure {
             // Put the code you want to measure the time of here.
         }
     }

@@ -2,7 +2,7 @@
 //  FavouriteCity+CoreDataClass.swift
 //  Clima
 //
-//  Created by Nicole Scholtz on 2023/05/12.
+//  Created by Nicole Scholtz on 2023/05/13.
 //
 //
 
