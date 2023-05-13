@@ -2,7 +2,7 @@
 //  WeatherModel+CoreDataProperties.swift
 //  Clima
 //
-//  Created by Nicole Scholtz on 2023/05/12.
+//  Created by Nicole Scholtz on 2023/05/13.
 //
 //
 
@@ -21,7 +21,8 @@ extension WeatherModel {
     @NSManaged public var minTemperature: Double
     @NSManaged public var weatherConditionID: Int32
     @NSManaged public var weatherDate: Date?
-    @NSManaged public var favouriteCities: FavouriteCity?
+    @NSManaged public var cityName: String?
+    @NSManaged public var favouriteCity: FavouriteCity?
 
 }
 

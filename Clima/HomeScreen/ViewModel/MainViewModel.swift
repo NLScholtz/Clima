@@ -12,67 +12,74 @@ import CoreData
 
 protocol MainViewModelDelegate: AnyObject {
     func weatherUpdated()
-    func receivedCity(city: String)
 }
 
-class MainViewModel: NSObject & CLLocationManagerDelegate  {
+class MainViewModel: NSObject & CLLocationManagerDelegate {
     
     private weak var delegate: MainViewModelDelegate?
     private let locationManager = CLLocationManager()
     private let weatherManager = WeatherManager()
     private let coreManager = WeatherStorageManager()
-    private var weatherModel: WeatherResponses?
+    private var weatherModel: [WeatherModel]?
+    var cityName: String?
     private var weatherCurrent = WeatherCurrent()
-    private var numberOfForecast: Int { return weatherModel?.list.count ?? 0 }
     private(set) var favouriteCity: [FavouriteCity] = []
+    var numberOfForecast: Int{ return weatherModel?.count ?? 0 }
+    var i = Int()
+    var isUpdateData = Bool()
     
     let forecastDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
     init(delegate: MainViewModelDelegate) {
         self.delegate = delegate
-        
-    }
-    
-    var cityName: String {
-        return "\(weatherModel!.city.name)"
+        //coreManager.deleteAllFavouriteWeather()
     }
     
     func currentTemperature(at index: Int) -> String {
-        return "\(weatherModel?.list[index].main.temp.description ?? "")"
+        return "\(Int(weatherModel?[index].currentTemperature ?? 0.0))°"
     }
     
     func minTemperature(at index: Int) -> String {
-        return "\(weatherModel!.list[index].main.temp_min.description)"
+        return "\(Int(weatherModel?[index].minTemperature ?? 0.0))°"
     }
     
     func maxTemperature(at index: Int) -> String {
-        return "\(weatherModel!.list[index].main.temp_max.description)"
+        return "\(Int(weatherModel?[index].maxTemperature ?? 0.0))°"
     }
     
     func weatherCondtion(at index: Int) -> String {
-        return "\(weatherCurrent.weatherConditionState(condition: weatherModel?.list[index].weather[index].id ?? 800))"
+        return "\(weatherCurrent.weatherConditionState(condition: Int(weatherModel?.first?.weatherConditionID ?? 800)))°"
     }
     
     func weatherConditionImage(at index: Int) -> UIImage {
-        return weatherCurrent.weatherIconState(condition: weatherModel?.list[index].weather.first!.id ?? 800)
+        return weatherCurrent.weatherIconState(condition: Int(weatherModel?.first?.weatherConditionID ?? 800))
     }
     
     func weatherBackgroundState(at index: Int) -> UIImage {
-        return weatherCurrent.weatherBackgroundState(condition: weatherModel!.list[index].weather[index].id)
+        return weatherCurrent.weatherBackgroundState(condition: Int(weatherModel?.first?.weatherConditionID ?? 800))
     }
     
     func weatherColorState(at index: Int) -> UIColor {
-        return weatherCurrent.weatherParentViewState(condition: weatherModel!.list[index].weather[index].id)
+        return weatherCurrent.weatherParentViewState(condition: Int(weatherModel?.first?.weatherConditionID ?? 800))
     }
     
-    func saveWeatherOffline(image: UIImage, cityName: String) -> UIImage {
-        coreManager.storeFavouriteCity(city: cityName)
-        
-        if image == UIImage(systemName: "bookmark") {
-            return UIImage(systemName: "bookmark.fill") ?? UIImage(systemName: "bookmark.fill")!
+    func saveWeatherOffline(cityName: String) {
+        let weather = ["name": cityName.description]
+        if isUpdateData {
+            coreManager.showFavouriteWeather(object: weather , i: i)
         } else {
-            return UIImage(systemName: "bookmark") ?? UIImage(systemName: "bookmark")!
+            if let city = coreManager.entityFor(cityName: cityName) {
+                guard let weatherModelArray = weatherModel else { return }
+                city.weatherModel = NSSet(array: weatherModelArray)
+                coreManager.saveContext()
+            } else {
+                let city = coreManager.saveWeatherToFavourties(object: weather)
+                guard let weatherModelArray = weatherModel else { return }
+                city.weatherModel = NSSet(array: weatherModelArray)
+                coreManager.saveContext()
+            }
         }
+
     }
 
     func setupLocationManager() {
@@ -87,9 +94,17 @@ class MainViewModel: NSObject & CLLocationManagerDelegate  {
         weatherManager.getWeatherDataByCity(city: city) { (result) in
             switch result {
             case .success(let weatherModel):
-                self.weatherModel = weatherModel
+                self.cityName = weatherModel.city.name
+                self.weatherModel = [WeatherModel]()
+                for weather in weatherModel.list {
+                    let weatherObject = self.coreManager.createNewEntity()
+                    weatherObject.maxTemperature = weather.main.temp_max
+                    weatherObject.minTemperature = weather.main.temp_min
+                    weatherObject.weatherConditionID = Int32(weather.weather.first?.id ?? 800)
+                    weatherObject.currentTemperature = weather.main.temp
+                    self.weatherModel?.append(weatherObject)
+                }
                 DispatchQueue.main.async {
-                    //self.updateWeatherInfo(info: weatherModel)
                     self.delegate?.weatherUpdated()
                 }
                 print(weatherModel)
@@ -111,9 +126,17 @@ class MainViewModel: NSObject & CLLocationManagerDelegate  {
             weatherManager.getWeatherData(lat: latitude, lon: longitude) { (result) in
                 switch result {
                 case .success(let weatherModel):
-                    self.weatherModel = weatherModel
+                    self.cityName = weatherModel.city.name
+                    self.weatherModel = [WeatherModel]()
+                    for weather in weatherModel.list {
+                        let weatherObject = self.coreManager.createNewEntity()
+                        weatherObject.maxTemperature = weather.main.temp_max
+                        weatherObject.minTemperature = weather.main.temp_min
+                        weatherObject.weatherConditionID = Int32(weather.weather.first?.id ?? 800)
+                        weatherObject.currentTemperature = weather.main.temp
+                        self.weatherModel?.append(weatherObject)
+                    }
                     DispatchQueue.main.async {
-                        //self.updateWeatherInfo(info: weatherModel)
                         self.delegate?.weatherUpdated()
                     }
                     print(weatherModel)
@@ -126,6 +149,14 @@ class MainViewModel: NSObject & CLLocationManagerDelegate  {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
+    }
+    
+    func offlineCitySelected(cityName: String) {
+        if let city = coreManager.entityFor(cityName: cityName) {
+            self.cityName = cityName
+            self.weatherModel = city.weatherModel?.allObjects as? [WeatherModel]
+            delegate?.weatherUpdated()
+        }
     }
 }
 
