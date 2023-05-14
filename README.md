@@ -9,4 +9,4 @@ Clima is a user-friendly weather app that allows users to get real-time weather 
 That's easy! Now simply run the application and you will be directed to the landing view where your current location's weather will be displayed IF you are connected to the internet. If you are not, the view displays the last viewed location's weather. When connected to a network you can easily toggle between two designs, search a city's weather, return to your current location and save a location's weather to your favourites... which you can easily access through the favourites button to see all you current favourites.
 
 # To-Do?
-I still have unit testing that I have to improve, I could not make the deadline for it.
+I still have unit testing that I have to improve, I could not make the deadline for it. As well as Offline Mode, it does support it but won't display correct data.
