@@ -19,15 +19,14 @@ class MainViewModel {
     
     private weak var delegate: MainViewModelDelegate?
     
-    var locationManager: LocationManagable?
     private let weatherManager = WeatherManager()
     private var coreManager = WeatherStorageManager()
     private var weatherModel: [WeatherModel]?
-    var cityName: String?
     private var weatherCurrent = WeatherCurrent()
     private(set) var favouriteCity: [FavouriteCity] = []
     var numberOfForecast: Int{ return weatherModel?.count ?? 0 }
-    var i = Int()
+    var locationManager: LocationManagable?
+    var cityName: String?
     
     var forecastDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
@@ -68,7 +67,7 @@ class MainViewModel {
     
     func saveWeatherOffline(cityName: String) {
         let weather = ["name": cityName.description]
-        if let _ = coreManager.entityFor(cityName: cityName) {
+        if let _ = coreManager.createEntityFor(cityName: cityName) {
         } else {
             let _ = coreManager.saveFavouriteCity(object: weather)
         }
@@ -78,7 +77,7 @@ class MainViewModel {
         locationManager?.setupLocationManager(locationDelegate: self)
     }
     
-    func getOfflineWeather() {
+    func retrieveOfflineWeather() {
         self.weatherModel = coreManager.getOfflineWeather()
         cityName = weatherModel?.first?.cityName
         DispatchQueue.main.async {
@@ -86,16 +85,16 @@ class MainViewModel {
         }
     }
     
-    func cityReceived(city: String) {
+    func cityDetermined(city: String) {
         print(city)
         if CheckNetworkConnection.isConnectedToNetwork() {
-            weatherManager.getWeatherDataByCity(city: city) { (result) in
+            weatherManager.getWeatherResponseByCity(city: city) { (result) in
                 DispatchQueue.main.async {
                     self.processWeatherResponse(result)
                 }
             }
         } else {
-            getOfflineWeather()
+            retrieveOfflineWeather()
         }
     }
     
@@ -117,7 +116,7 @@ class MainViewModel {
             self.coreManager.saveContext()
             
             DispatchQueue.main.async {
-                if let _ = self.coreManager.entityFor(cityName: self.cityName ?? "") {
+                if let _ = self.coreManager.createEntityFor(cityName: self.cityName ?? "") {
                     self.delegate?.city(isFavourite: true)
                 } else {
                     self.delegate?.city(isFavourite: false)
@@ -135,7 +134,7 @@ class MainViewModel {
 extension MainViewModel: LocationManagerDelegate {
 
     func locationDetermined(lat: Double, lon: Double) {
-        weatherManager.getWeatherData(lat: lat.description, lon: lon.description) { (result) in
+        weatherManager.getWeatherResponse(lat: lat.description, lon: lon.description) { (result) in
             DispatchQueue.main.async {
                 self.processWeatherResponse(result)
             }

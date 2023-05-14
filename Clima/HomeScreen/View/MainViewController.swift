@@ -21,7 +21,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var cityName: UILabel!
     @IBOutlet weak var weatherCondition: UILabel!
     @IBOutlet weak var weatherBackground: UIImageView!
-    @IBOutlet weak var parentView: UIView!
+    @IBOutlet weak var weatherParentView: UIView!
     @IBOutlet weak var lastUpdatedDate: UILabel!
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -37,7 +37,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
             viewModel.setupLocationManager()
         } else {
             showOfflineAlert()
-            viewModel.getOfflineWeather()
+            viewModel.retrieveOfflineWeather()
         }
     }
     
@@ -45,7 +45,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         viewModel.setupLocationManager()
     }
     
-    @IBAction func saveWeather(_ sender: UIButton) {
+    @IBAction func storeWeatherLocationToFavourites(_ sender: UIButton) {
         viewModel.saveWeatherOffline(cityName: cityName.text ?? "")
         sender.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
     }
@@ -53,7 +53,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func searchWeatherByCity(_ sender: UIButton) {
         showCityDialog(title: "Search City", subtitle: "Provide a city name do display the weather", actionTitle: "OK", cancelTitle: "Cancel", inputPlaceholder: "Johannesburg", inputKeyboardType: .default, actionHandler: { (city:String?) in
             //print("The searched city is \(city ?? "")")
-            self.viewModel.cityReceived(city: city ?? "")
+            self.viewModel.cityDetermined(city: city ?? "")
         })
     }
     
@@ -63,13 +63,13 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func offlineModeButton(_ sender: UIButton) {
         showOfflineAlert()
-        viewModel.getOfflineWeather()
+        viewModel.retrieveOfflineWeather()
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let favouriteViewController = segue.destination as! FavouriteWeatherViewController
-        favouriteViewController.delegate = self
+        favouriteViewController.viewModel.delegate = self
     }
 }
 
@@ -132,7 +132,7 @@ extension MainViewController: MainViewModelDelegate, FavouriteWeatherViewModelDe
         maxTemperature.text = viewModel.maxTemperature(at: 0)
         weatherCondition.text = viewModel.weatherCondtion(at: 0)
         weatherBackground.image = viewModel.weatherBackgroundState (at: 0)
-        parentView.backgroundColor = viewModel.weatherColorState(at: 0)
+        weatherParentView.backgroundColor = viewModel.weatherColorState(at: 0)
         
         DispatchQueue.main.async {
             self.forecastTableView.reloadData()
@@ -144,6 +144,6 @@ extension MainViewController: MainViewModelDelegate, FavouriteWeatherViewModelDe
 
 extension MainViewController: FavouriteWeatherViewControllerDelegate {
     func favouriteCitySelected(cityName: String) {
-        self.viewModel.cityReceived(city: cityName )
+        self.viewModel.cityDetermined(city: cityName )
     }
 }

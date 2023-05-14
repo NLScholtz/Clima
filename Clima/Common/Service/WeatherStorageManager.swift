@@ -12,7 +12,7 @@ import UIKit
 class WeatherStorageManager {
     
     static var shareInstance = WeatherStorageManager()
-    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+    private let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
     func getFavouriteCities() -> [FavouriteCity] {
         var favouriteWeather = [FavouriteCity]()
@@ -59,7 +59,7 @@ class WeatherStorageManager {
         return newEntity
     }
     
-    func entityFor(cityName: String) -> FavouriteCity? {
+    func createEntityFor(cityName: String) -> FavouriteCity? {
         let fetchRequest: NSFetchRequest<FavouriteCity>
         fetchRequest = FavouriteCity.fetchRequest()
        
