@@ -19,15 +19,14 @@ class MainViewModel {
     
     private weak var delegate: MainViewModelDelegate?
     
-    var locationManager: LocationManagable?
     private let weatherManager = WeatherManager()
     private var coreManager = WeatherStorageManager()
     private var weatherModel: [WeatherModel]?
-    var cityName: String?
     private var weatherCurrent = WeatherCurrent()
     private(set) var favouriteCity: [FavouriteCity] = []
     var numberOfForecast: Int{ return weatherModel?.count ?? 0 }
-    var i = Int()
+    var locationManager: LocationManagable?
+    var cityName: String?
     
     var forecastDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
@@ -78,7 +77,7 @@ class MainViewModel {
         locationManager?.setupLocationManager(locationDelegate: self)
     }
     
-    func getOfflineWeather() {
+    func retrieveOfflineWeather() {
         self.weatherModel = coreManager.getOfflineWeather()
         cityName = weatherModel?.first?.cityName
         DispatchQueue.main.async {
@@ -86,16 +85,16 @@ class MainViewModel {
         }
     }
     
-    func cityReceived(city: String) {
+    func cityDetermined(city: String) {
         print(city)
         if CheckNetworkConnection.isConnectedToNetwork() {
-            weatherManager.getWeatherDataByCity(city: city) { (result) in
+            weatherManager.getWeatherResponseByCity(city: city) { (result) in
                 DispatchQueue.main.async {
                     self.processWeatherResponse(result)
                 }
             }
         } else {
-            getOfflineWeather()
+            retrieveOfflineWeather()
         }
     }
     
@@ -135,7 +134,7 @@ class MainViewModel {
 extension MainViewModel: LocationManagerDelegate {
 
     func locationDetermined(lat: Double, lon: Double) {
-        weatherManager.getWeatherData(lat: lat.description, lon: lon.description) { (result) in
+        weatherManager.getWeatherResponse(lat: lat.description, lon: lon.description) { (result) in
             DispatchQueue.main.async {
                 self.processWeatherResponse(result)
             }

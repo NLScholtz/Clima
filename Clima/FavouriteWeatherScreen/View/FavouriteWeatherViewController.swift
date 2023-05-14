@@ -12,12 +12,8 @@ protocol FavouriteWeatherViewControllerDelegate {
 }
 
 class FavouriteWeatherViewController: UIViewController{
-    
-    var favouriteCity = [FavouriteCity]()
-    var delegate: FavouriteWeatherViewControllerDelegate?
-    var weatherManager = WeatherStorageManager()
 
-    private lazy var viewModel = FavouriteWeatherViewModel()
+    lazy var viewModel = FavouriteWeatherViewModel()
 
     @IBOutlet weak var favouriteWeatherTableView: UITableView!
     override func viewDidLoad() {
@@ -41,13 +37,13 @@ extension FavouriteWeatherViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = viewModel.favouriteCityName(at: indexPath.row).description
         //guard let favouriteCityName = selectedCity else { return }
-        delegate?.favouriteCitySelected(cityName: selectedCity)
+        viewModel.delegate?.favouriteCitySelected(cityName: selectedCity)
         dismiss(animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            favouriteCity = WeatherStorageManager.shareInstance.deleteFavouriteCity(index: indexPath.row)
+            viewModel.favouriteCity = WeatherStorageManager.shareInstance.deleteFavouriteCity(index: indexPath.row)
             self.favouriteWeatherTableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }

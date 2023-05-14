@@ -65,7 +65,7 @@ final class MainViewModelTest: XCTestCase {
     }
     
     func testGetOfflineWeather() throws {
-        XCTAssertTrue(viewModelToTest?.getOfflineWeather() != nil, "Could not get offline weather")
+        XCTAssertTrue(viewModelToTest?.retrieveOfflineWeather() != nil, "Could not get offline weather")
     }
     
     func testCityRevceived() throws {

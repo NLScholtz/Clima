@@ -27,7 +27,7 @@ class WeatherManager {
         static let get = "GET"
     }
     
-    func getWeatherData(lat: String, lon: String, completion: ((Result<WeatherResponses>) -> Void)?) -> () {
+    func getWeatherResponse(lat: String, lon: String, completion: ((Result<WeatherResponses>) -> Void)?) -> () {
         var urlComponents = getBaseComponent()
         let queryItemLan = URLQueryItem(name: "lat", value: lat)
         let queryItemLon = URLQueryItem(name: "lon", value:lon)
@@ -37,7 +37,7 @@ class WeatherManager {
         getWeather(with: urlComponents, completion: completion)
     }
     
-    func getWeatherDataByCity(city: String, completion: ((Result<WeatherResponses>) -> Void)?) {
+    func getWeatherResponseByCity(city: String, completion: ((Result<WeatherResponses>) -> Void)?) {
         var urlComponents = getBaseComponent()
         let queryItemCity = URLQueryItem(name: "q", value: city)
             

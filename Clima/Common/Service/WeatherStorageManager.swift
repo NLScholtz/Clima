@@ -12,7 +12,7 @@ import UIKit
 class WeatherStorageManager {
     
     static var shareInstance = WeatherStorageManager()
-    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+    private let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
     func getFavouriteCities() -> [FavouriteCity] {
         var favouriteWeather = [FavouriteCity]()
