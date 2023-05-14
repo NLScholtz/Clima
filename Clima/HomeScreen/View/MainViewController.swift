@@ -69,7 +69,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let favouriteViewController = segue.destination as! FavouriteWeatherViewController
-        favouriteViewController.viewModel.delegate = self
+        favouriteViewController.delegate = self
     }
 }
 

@@ -14,7 +14,7 @@ protocol FavouriteWeatherViewModelDelegate {
 class FavouriteWeatherViewModel {
     
     var favouriteCity = [FavouriteCity]()
-    var delegate: FavouriteWeatherViewControllerDelegate?
+    
     var weatherManager = WeatherStorageManager()
     var numberOfFavouriteCities: Int { return favouriteCity.count }
     
