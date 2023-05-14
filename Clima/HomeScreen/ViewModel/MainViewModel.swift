@@ -67,7 +67,7 @@ class MainViewModel {
     
     func saveWeatherOffline(cityName: String) {
         let weather = ["name": cityName.description]
-        if let _ = coreManager.entityFor(cityName: cityName) {
+        if let _ = coreManager.createEntityFor(cityName: cityName) {
         } else {
             let _ = coreManager.saveFavouriteCity(object: weather)
         }
@@ -116,7 +116,7 @@ class MainViewModel {
             self.coreManager.saveContext()
             
             DispatchQueue.main.async {
-                if let _ = self.coreManager.entityFor(cityName: self.cityName ?? "") {
+                if let _ = self.coreManager.createEntityFor(cityName: self.cityName ?? "") {
                     self.delegate?.city(isFavourite: true)
                 } else {
                     self.delegate?.city(isFavourite: false)

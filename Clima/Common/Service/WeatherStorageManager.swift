@@ -59,7 +59,7 @@ class WeatherStorageManager {
         return newEntity
     }
     
-    func entityFor(cityName: String) -> FavouriteCity? {
+    func createEntityFor(cityName: String) -> FavouriteCity? {
         let fetchRequest: NSFetchRequest<FavouriteCity>
         fetchRequest = FavouriteCity.fetchRequest()
        
