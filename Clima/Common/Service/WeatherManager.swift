@@ -89,7 +89,6 @@ class WeatherManager {
                 completion?(.failure(error))
                 print(error.localizedDescription)
             }
-            
         }
         task.resume()
     }

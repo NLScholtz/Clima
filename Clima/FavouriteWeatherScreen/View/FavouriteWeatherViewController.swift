@@ -14,6 +14,7 @@ protocol FavouriteWeatherViewControllerDelegate {
 class FavouriteWeatherViewController: UIViewController{
 
     lazy var viewModel = FavouriteWeatherViewModel()
+    var delegate: FavouriteWeatherViewControllerDelegate?
 
     @IBOutlet weak var favouriteWeatherTableView: UITableView!
     override func viewDidLoad() {
@@ -37,7 +38,7 @@ extension FavouriteWeatherViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCity = viewModel.favouriteCityName(at: indexPath.row).description
         //guard let favouriteCityName = selectedCity else { return }
-        viewModel.delegate?.favouriteCitySelected(cityName: selectedCity)
+        delegate?.favouriteCitySelected(cityName: selectedCity)
         dismiss(animated: true)
     }
     
