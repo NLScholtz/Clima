@@ -38,5 +38,3 @@ struct Coordinates: Codable {
     let lat: Double
     let lon: Double
 }
-
-

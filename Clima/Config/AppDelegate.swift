@@ -36,8 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return self.restrictRotation
     }
     
-    
-    
     lazy var persistentContainer: NSPersistentContainer = {
             /*
              The persistent container for the application. This implementation
@@ -80,7 +78,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-
-
 }
 

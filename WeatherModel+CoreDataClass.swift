@@ -2,7 +2,7 @@
 //  WeatherModel+CoreDataClass.swift
 //  Clima
 //
-//  Created by Nicole Scholtz on 2023/05/13.
+//  Created by Nicole Scholtz on 2023/05/14.
 //
 //
 
@@ -10,6 +10,4 @@ import Foundation
 import CoreData
 
 
-public class WeatherModel: NSManagedObject {
-
-}
+public class WeatherModel: NSManagedObject { }

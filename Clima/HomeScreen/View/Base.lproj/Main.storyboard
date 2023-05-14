@@ -132,6 +132,9 @@
                                             <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="offlineModeButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cUR-JP-BMV"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jBb-ne-xtH">
                                         <rect key="frame" x="248" y="469" width="116" height="33.5"/>
@@ -206,7 +209,7 @@
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="7Re-32-Z2j"/>
                                         </connections>
                                     </tableView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Updated: 05/01/23" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BMA-WD-6sA">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Updated: --/--/--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BMA-WD-6sA">
                                         <rect key="frame" x="50" y="502.5" width="117" height="13"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="13" id="QxP-fH-RN0"/>
@@ -274,8 +277,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUa-Fg-BnI">
-                                <rect key="frame" x="186" y="63" width="42" height="22.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUa-Fg-BnI">
+                                <rect key="frame" x="192" y="63" width="30.5" height="22.5"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -307,6 +310,29 @@
                                     <action selector="showCurrentLocation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ujP-D5-oSO"/>
                                 </connections>
                             </button>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lTg-1G-dvw">
+                                <rect key="frame" x="152.5" y="383.5" width="109" height="129"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="JWU-9K-xLJ">
+                                        <rect key="frame" x="36" y="30" width="37" height="37"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3N1-cw-eTG">
+                                        <rect key="frame" x="15.5" y="75" width="78" height="22.5"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="3N1-cw-eTG" firstAttribute="top" secondItem="JWU-9K-xLJ" secondAttribute="bottom" constant="8" symbolic="YES" id="6oX-M5-uvy"/>
+                                    <constraint firstAttribute="width" constant="109" id="H1t-Ez-inD"/>
+                                    <constraint firstItem="3N1-cw-eTG" firstAttribute="centerX" secondItem="lTg-1G-dvw" secondAttribute="centerX" id="LNR-hD-f3o"/>
+                                    <constraint firstItem="JWU-9K-xLJ" firstAttribute="centerX" secondItem="lTg-1G-dvw" secondAttribute="centerX" id="YBg-mz-MQs"/>
+                                    <constraint firstItem="JWU-9K-xLJ" firstAttribute="top" secondItem="lTg-1G-dvw" secondAttribute="top" constant="30" id="cIG-Z4-P5R"/>
+                                    <constraint firstAttribute="height" constant="129" id="xbx-rD-tyO"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -320,6 +346,7 @@
                             <constraint firstItem="yAT-Qj-4Fa" firstAttribute="leading" secondItem="Jlz-7s-O73" secondAttribute="trailing" constant="284" id="JGg-4X-rQU"/>
                             <constraint firstItem="LFz-xD-lSO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="Jde-Ct-Y1G"/>
                             <constraint firstItem="2Kz-eL-Xzk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="-28" id="K8r-1q-7ua"/>
+                            <constraint firstItem="lTg-1G-dvw" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Lb3-rt-NfE"/>
                             <constraint firstItem="Ql5-Zg-7c5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="NAb-N0-uYM"/>
                             <constraint firstItem="W1j-hg-BTd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="OYj-69-a66"/>
                             <constraint firstItem="Jlz-7s-O73" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Th3-Lr-Yx7"/>
@@ -329,6 +356,7 @@
                             <constraint firstItem="oLf-fU-5GX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="bjl-ZS-sBI"/>
                             <constraint firstItem="oLf-fU-5GX" firstAttribute="top" secondItem="2Kz-eL-Xzk" secondAttribute="bottom" constant="-10" id="bwf-UG-O9T"/>
                             <constraint firstItem="yAT-Qj-4Fa" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="e3P-SY-E0W"/>
+                            <constraint firstItem="lTg-1G-dvw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="lc4-Nk-oue"/>
                             <constraint firstItem="2Kz-eL-Xzk" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="29" id="rVL-Dy-iiX"/>
                             <constraint firstAttribute="bottom" secondItem="oLf-fU-5GX" secondAttribute="bottom" id="siP-CE-thM"/>
                             <constraint firstItem="Ql5-Zg-7c5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="70" id="v5K-7b-Qip"/>
@@ -340,10 +368,13 @@
                     <navigationItem key="navigationItem" id="AMc-jj-pSz"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="JWU-9K-xLJ" id="OAF-mQ-7rG"/>
                         <outlet property="cityName" destination="vUa-Fg-BnI" id="2bW-ja-FIq"/>
                         <outlet property="currentTemperate" destination="VtE-vk-SHz" id="qS4-Y5-4f1"/>
+                        <outlet property="favouriteButton" destination="yAT-Qj-4Fa" id="CtY-oi-1wp"/>
                         <outlet property="forecastTableView" destination="jcb-CO-ETc" id="NYR-vW-xRp"/>
                         <outlet property="lastUpdatedDate" destination="BMA-WD-6sA" id="FC2-Lb-rhi"/>
+                        <outlet property="loadingView" destination="lTg-1G-dvw" id="zzj-qV-Q9y"/>
                         <outlet property="mainCurrentTemperature" destination="Ql5-Zg-7c5" id="yIL-RV-fuI"/>
                         <outlet property="maxTemperature" destination="B70-65-gRg" id="ewt-p2-7Rl"/>
                         <outlet property="minTemperature" destination="kNt-P6-zoG" id="JHE-cW-Iwg"/>

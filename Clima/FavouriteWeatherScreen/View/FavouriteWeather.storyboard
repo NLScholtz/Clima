@@ -40,22 +40,13 @@
                                                     <color key="textColor" name="Cloudy"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2R0-Eb-pla">
-                                                    <rect key="frame" x="305" y="9" width="49" height="26"/>
-                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
-                                                    <color key="textColor" name="Cloudy"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="2R0-Eb-pla" firstAttribute="centerY" secondItem="9qe-m5-s3H" secondAttribute="centerY" id="CFe-bJ-BrG"/>
                                                 <constraint firstItem="upX-MY-9VQ" firstAttribute="leading" secondItem="9qe-m5-s3H" secondAttribute="leading" constant="20" symbolic="YES" id="SRQ-tX-8r6"/>
-                                                <constraint firstAttribute="trailing" secondItem="2R0-Eb-pla" secondAttribute="trailing" constant="20" id="ZfJ-vP-Cg9"/>
                                                 <constraint firstItem="upX-MY-9VQ" firstAttribute="centerY" secondItem="9qe-m5-s3H" secondAttribute="centerY" id="axQ-g5-Zjt"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="favouriteCityDate" destination="2R0-Eb-pla" id="k6o-hP-ULx"/>
                                             <outlet property="favouriteCityName" destination="upX-MY-9VQ" id="7Wd-uW-LmV"/>
                                         </connections>
                                     </tableViewCell>
