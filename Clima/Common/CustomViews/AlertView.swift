@@ -19,7 +19,6 @@ extension UIViewController {
                          actionHandler: ((_ text: String?) -> Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: subtitle, preferredStyle: .alert)
-        
         alert.addTextField { (textField:UITextField) in
             textField.placeholder = inputPlaceholder
             textField.keyboardType = inputKeyboardType

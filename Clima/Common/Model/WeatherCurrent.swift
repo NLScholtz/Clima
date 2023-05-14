@@ -11,7 +11,6 @@ import UIKit
 struct WeatherCurrent {
     
     let condition: Int = 0
-    
     func weatherConditionState(condition: Int) -> String {
         switch condition {
         case 500...504: return "RAINY"

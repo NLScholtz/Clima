@@ -21,7 +21,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var cityName: UILabel!
     @IBOutlet weak var weatherCondition: UILabel!
     @IBOutlet weak var weatherBackground: UIImageView!
-    @IBOutlet weak var parentView: UIView!
+    @IBOutlet weak var weatherParentView: UIView!
     @IBOutlet weak var lastUpdatedDate: UILabel!
     @IBOutlet weak var loadingView: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -132,7 +132,7 @@ extension MainViewController: MainViewModelDelegate, FavouriteWeatherViewModelDe
         maxTemperature.text = viewModel.maxTemperature(at: 0)
         weatherCondition.text = viewModel.weatherCondtion(at: 0)
         weatherBackground.image = viewModel.weatherBackgroundState (at: 0)
-        parentView.backgroundColor = viewModel.weatherColorState(at: 0)
+        weatherParentView.backgroundColor = viewModel.weatherColorState(at: 0)
         
         DispatchQueue.main.async {
             self.forecastTableView.reloadData()
