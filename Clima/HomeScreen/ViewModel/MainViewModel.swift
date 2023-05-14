@@ -12,26 +12,29 @@ import CoreData
 
 protocol MainViewModelDelegate: AnyObject {
     func weatherUpdated()
+    func city(isFavourite: Bool)
 }
 
-class MainViewModel: NSObject & CLLocationManagerDelegate {
+class MainViewModel {
     
     private weak var delegate: MainViewModelDelegate?
-    private let locationManager = CLLocationManager()
+    
+    var locationManager: LocationManagable?
     private let weatherManager = WeatherManager()
-    private let coreManager = WeatherStorageManager()
+    private var coreManager = WeatherStorageManager()
     private var weatherModel: [WeatherModel]?
     var cityName: String?
     private var weatherCurrent = WeatherCurrent()
     private(set) var favouriteCity: [FavouriteCity] = []
     var numberOfForecast: Int{ return weatherModel?.count ?? 0 }
     var i = Int()
-    var isUpdateData = Bool()
     
-    let forecastDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    var forecastDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
-    init(delegate: MainViewModelDelegate) {
+    init(delegate: MainViewModelDelegate, coreManager: WeatherStorageManager, locationManager: LocationManagable) {
         self.delegate = delegate
+        self.coreManager = coreManager
+        self.locationManager = locationManager
         //coreManager.deleteAllFavouriteWeather()
     }
     
@@ -65,97 +68,77 @@ class MainViewModel: NSObject & CLLocationManagerDelegate {
     
     func saveWeatherOffline(cityName: String) {
         let weather = ["name": cityName.description]
-        if isUpdateData {
-            coreManager.showFavouriteWeather(object: weather , i: i)
+        if let _ = coreManager.entityFor(cityName: cityName) {
         } else {
-            if let city = coreManager.entityFor(cityName: cityName) {
-                guard let weatherModelArray = weatherModel else { return }
-                city.weatherModel = NSSet(array: weatherModelArray)
-                coreManager.saveContext()
-            } else {
-                let city = coreManager.saveWeatherToFavourties(object: weather)
-                guard let weatherModelArray = weatherModel else { return }
-                city.weatherModel = NSSet(array: weatherModelArray)
-                coreManager.saveContext()
-            }
+            let _ = coreManager.saveFavouriteCity(object: weather)
         }
-
     }
 
     func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        locationManager?.setupLocationManager(locationDelegate: self)
+    }
+    
+    func getOfflineWeather() {
+        self.weatherModel = coreManager.getOfflineWeather()
+        cityName = weatherModel?.first?.cityName
+        DispatchQueue.main.async {
+            self.delegate?.weatherUpdated()
+        }
     }
     
     func cityReceived(city: String) {
         print(city)
-        weatherManager.getWeatherDataByCity(city: city) { (result) in
-            switch result {
-            case .success(let weatherModel):
-                self.cityName = weatherModel.city.name
-                self.weatherModel = [WeatherModel]()
-                for weather in weatherModel.list {
-                    let weatherObject = self.coreManager.createNewEntity()
-                    weatherObject.maxTemperature = weather.main.temp_max
-                    weatherObject.minTemperature = weather.main.temp_min
-                    weatherObject.weatherConditionID = Int32(weather.weather.first?.id ?? 800)
-                    weatherObject.currentTemperature = weather.main.temp
-                    self.weatherModel?.append(weatherObject)
-                }
+        if CheckNetworkConnection.isConnectedToNetwork() {
+            weatherManager.getWeatherDataByCity(city: city) { (result) in
                 DispatchQueue.main.async {
-                    self.delegate?.weatherUpdated()
+                    self.processWeatherResponse(result)
                 }
-                print(weatherModel)
-            case .failure(let error):
-                print("Error \(error.localizedDescription)")
             }
+        } else {
+            getOfflineWeather()
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        if location.horizontalAccuracy > 0 {
-            locationManager.stopUpdatingLocation()
-            locationManager.delegate = nil
-            print("long = \(location.coordinate.longitude)", "lat = \(location.coordinate.latitude)")
-            let latitude = location.coordinate.latitude.description
-            let longitude = location.coordinate.longitude.description
+    func processWeatherResponse(_ result: WeatherManager.Result<WeatherResponses>) {
+        switch result {
+        case .success(let weatherModel):
+            self.coreManager.deleteOfflineWeatherData()
+            self.weatherModel = [WeatherModel]()
+            self.cityName = weatherModel.city.name
+            for weather in weatherModel.list {
+                let weatherObject = self.coreManager.createNewWeatherModel()
+                weatherObject.cityName = weatherModel.city.name
+                weatherObject.maxTemperature = weather.main.temp_max
+                weatherObject.minTemperature = weather.main.temp_min
+                weatherObject.weatherConditionID = Int32(weather.weather.first?.id ?? 800)
+                weatherObject.currentTemperature = weather.main.temp
+                self.weatherModel?.append(weatherObject)
+            }
+            self.coreManager.saveContext()
             
-            weatherManager.getWeatherData(lat: latitude, lon: longitude) { (result) in
-                switch result {
-                case .success(let weatherModel):
-                    self.cityName = weatherModel.city.name
-                    self.weatherModel = [WeatherModel]()
-                    for weather in weatherModel.list {
-                        let weatherObject = self.coreManager.createNewEntity()
-                        weatherObject.maxTemperature = weather.main.temp_max
-                        weatherObject.minTemperature = weather.main.temp_min
-                        weatherObject.weatherConditionID = Int32(weather.weather.first?.id ?? 800)
-                        weatherObject.currentTemperature = weather.main.temp
-                        self.weatherModel?.append(weatherObject)
-                    }
-                    DispatchQueue.main.async {
-                        self.delegate?.weatherUpdated()
-                    }
-                    print(weatherModel)
-                case .failure(let error):
-                    print("Error \(error)")
+            DispatchQueue.main.async {
+                if let _ = self.coreManager.entityFor(cityName: self.cityName ?? "") {
+                    self.delegate?.city(isFavourite: true)
+                } else {
+                    self.delegate?.city(isFavourite: false)
                 }
+                self.delegate?.weatherUpdated()
             }
+            
+            print(weatherModel)
+        case .failure(let error):
+            print("Error \(error)")
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-    }
-    
-    func offlineCitySelected(cityName: String) {
-        if let city = coreManager.entityFor(cityName: cityName) {
-            self.cityName = cityName
-            self.weatherModel = city.weatherModel?.allObjects as? [WeatherModel]
-            delegate?.weatherUpdated()
+}
+
+extension MainViewModel: LocationManagerDelegate {
+
+    func locationDetermined(lat: Double, lon: Double) {
+        weatherManager.getWeatherData(lat: lat.description, lon: lon.description) { (result) in
+            DispatchQueue.main.async {
+                self.processWeatherResponse(result)
+            }
         }
     }
 }

@@ -8,9 +8,13 @@
 import Foundation
 import CoreLocation
 
+protocol WeatherManagerDelegate: AnyObject {
+    func getWeather<T: Decodable>(with components: URLComponents, completion: ((Result<T, Error>) -> Void)?)
+}
+
 class WeatherManager {
     
-    private let appId = "ca9db572fae974e04fc67268c81830a9"
+    private let appId = "e153dc8c7be638e11ffb58ee935fe7dd"
     private let apiHost = "api.openweathermap.org"
     private let apiPath = "/data/2.5/forecast"
     
@@ -53,7 +57,6 @@ class WeatherManager {
         let queryItemCount = URLQueryItem(name: "cnt", value: "5")
         
         urlComponents.queryItems = [ queryItemUnits, queryItemToken, queryItemCount]
-        
         return urlComponents
     }
     
@@ -86,6 +89,7 @@ class WeatherManager {
                 completion?(.failure(error))
                 print(error.localizedDescription)
             }
+            
         }
         task.resume()
     }

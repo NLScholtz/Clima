@@ -10,7 +10,7 @@ import UIKit
 class FavouriteWeatherTableViewCell: UITableViewCell {
 
     @IBOutlet weak var favouriteCityName: UILabel!
-    @IBOutlet weak var favouriteCityDate: UILabel!
+   // @IBOutlet weak var favouriteCityDate: UILabel!
     
     var favouriteWeather: FavouriteCity! {
         didSet {

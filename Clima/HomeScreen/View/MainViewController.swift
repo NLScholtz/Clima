@@ -10,7 +10,7 @@ import CoreLocation
 
 class MainViewController: UIViewController, CLLocationManagerDelegate {
     
-    private lazy var viewModel = MainViewModel(delegate: self)
+    private lazy var viewModel = MainViewModel(delegate: self, coreManager: WeatherStorageManager(), locationManager: LocationManager())
     
     @IBOutlet weak var toggleAppearance: UIButton!
     @IBOutlet weak var forecastTableView: UITableView!
@@ -23,13 +23,22 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var weatherBackground: UIImageView!
     @IBOutlet weak var parentView: UIView!
     @IBOutlet weak var lastUpdatedDate: UILabel!
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var favouriteButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         (UIApplication.shared.delegate as! AppDelegate).restrictRotation = .portrait
         toggleAppearance.addTarget(self, action: #selector(toggleAppearanceStyle), for: .touchUpInside)
         self.view.addSubview(toggleAppearance)
-        viewModel.setupLocationManager()
+        
+        if CheckNetworkConnection.isConnectedToNetwork() {
+            viewModel.setupLocationManager()
+        } else {
+            showOfflineAlert()
+            viewModel.getOfflineWeather()
+        }
     }
     
     @IBAction func showCurrentLocation(_ sender: UIButton) {
@@ -38,10 +47,11 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func saveWeather(_ sender: UIButton) {
         viewModel.saveWeatherOffline(cityName: cityName.text ?? "")
+        sender.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
     }
     
     @IBAction func searchWeatherByCity(_ sender: UIButton) {
-        showInputDialog(title: "Search City", subtitle: "Provide a city name do display the weather", actionTitle: "OK", cancelTitle: "Cancel", inputPlaceholder: "Johannesburg", inputKeyboardType: .default, actionHandler: { (city:String?) in
+        showCityDialog(title: "Search City", subtitle: "Provide a city name do display the weather", actionTitle: "OK", cancelTitle: "Cancel", inputPlaceholder: "Johannesburg", inputKeyboardType: .default, actionHandler: { (city:String?) in
             //print("The searched city is \(city ?? "")")
             self.viewModel.cityReceived(city: city ?? "")
         })
@@ -50,6 +60,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func displayFavourites(_ sender: UIButton) {
         performSegue(withIdentifier: "showFavouriteWeather", sender: self)
     }
+    
+    @IBAction func offlineModeButton(_ sender: UIButton) {
+        showOfflineAlert()
+        viewModel.getOfflineWeather()
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let favouriteViewController = segue.destination as! FavouriteWeatherViewController
@@ -85,14 +101,30 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
             window?.overrideUserInterfaceStyle = .light
         }
     }
+    
+    func showOfflineAlert() {
+        let alert = UIAlertController(title: "Offline", message: "You are now offline and will only view last location", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true)
+    }
 }
 
 extension MainViewController: MainViewModelDelegate, FavouriteWeatherViewModelDelegate {
+    func city(isFavourite: Bool) {
+        if isFavourite {
+            favouriteButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        } else {
+            favouriteButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        }
+    }
+    
     func favouriteWeather(object: [String : String], index: Int) {
         cityName.text = object["name"]
     }
     
     func weatherUpdated() {
+        self.loadingView.isHidden = false
+        self.activityIndicator.startAnimating()
         cityName.text = viewModel.cityName
         mainCurrentTemperature.text = viewModel.currentTemperature(at: 0)
         currentTemperate.text = viewModel.currentTemperature(at: 0)
@@ -104,17 +136,14 @@ extension MainViewController: MainViewModelDelegate, FavouriteWeatherViewModelDe
         
         DispatchQueue.main.async {
             self.forecastTableView.reloadData()
+            self.loadingView.isHidden = true
+            self.activityIndicator.stopAnimating()
         }
     }
 }
 
 extension MainViewController: FavouriteWeatherViewControllerDelegate {
     func favouriteCitySelected(cityName: String) {
-        if CheckNetworkConnection.isConnectedToNetwork() {
-            self.viewModel.cityReceived(city: cityName )
-        } else {
-            self.cityName.text = cityName
-            viewModel.offlineCitySelected(cityName: cityName)
-        }
+        self.viewModel.cityReceived(city: cityName )
     }
 }

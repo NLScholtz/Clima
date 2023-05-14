@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 extension UIViewController {
-    func showInputDialog(title:String? = nil,
+    func showCityDialog(title:String? = nil,
                          subtitle:String? = nil,
-                         actionTitle:String? = "Add",
+                         actionTitle:String? = "OK",
                          cancelTitle:String? = "Cancel",
                          inputPlaceholder:String? = nil,
                          inputKeyboardType:UIKeyboardType = UIKeyboardType.default,
